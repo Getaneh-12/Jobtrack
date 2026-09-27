@@ -7,16 +7,16 @@ function Applications({ applications, deleteApplication }) {
 
     const [search, setSearch] = useState('')
     const [statusFilter, setStatusFilter] = useState('all')
+    const [applicationToDelete, setApplicationToDelete] = useState(null)
 
     const filteredApplications = applications.filter((application) => {
 
+        const company = application.company || ''
+        const position = application.position || ''
+
         const matchesSearch =
-            application.company
-                .toLowerCase()
-                .includes(search.toLowerCase()) ||
-            application.position
-                .toLowerCase()
-                .includes(search.toLowerCase())
+            company.toLowerCase().includes(search.toLowerCase()) ||
+            position.toLowerCase().includes(search.toLowerCase())
 
         const matchesStatus =
             statusFilter === 'all' ||
@@ -25,17 +25,46 @@ function Applications({ applications, deleteApplication }) {
         return matchesSearch && matchesStatus
     })
 
+    function openDeleteModal(application) {
+        console.log('Selected application:', application)
+        setApplicationToDelete(application)
+    }
+
+    function confirmDelete() {
+
+        if (!applicationToDelete) {
+            console.log('No application selected')
+            return
+        }
+
+        console.log(
+            'Deleting:',
+            applicationToDelete.id,
+            applicationToDelete.company
+        )
+
+        deleteApplication(applicationToDelete.id)
+
+        setApplicationToDelete(null)
+    }
+
     return (
         <div className="applications">
+
+            {/* Page Header */}
 
             <div className="page-header">
 
                 <div>
                     <h1>Applications</h1>
-                    <p>Manage your job applications</p>
+
+                    <p>
+                        Manage your job applications
+                    </p>
                 </div>
 
                 <button
+                    type="button"
                     className="add-application-btn"
                     onClick={() => navigate('/add-application')}
                 >
@@ -44,7 +73,12 @@ function Applications({ applications, deleteApplication }) {
 
             </div>
 
+
+            {/* Applications Card */}
+
             <div className="applications-card">
+
+                {/* Search and Filter */}
 
                 <div className="applications-top">
 
@@ -53,13 +87,17 @@ function Applications({ applications, deleteApplication }) {
                         placeholder="Search company or position..."
                         className="search-input"
                         value={search}
-                        onChange={(event) => setSearch(event.target.value)}
+                        onChange={(event) =>
+                            setSearch(event.target.value)
+                        }
                     />
 
                     <select
                         className="status-filter"
                         value={statusFilter}
-                        onChange={(event) => setStatusFilter(event.target.value)}
+                        onChange={(event) =>
+                            setStatusFilter(event.target.value)
+                        }
                     >
 
                         <option value="all">
@@ -98,21 +136,29 @@ function Applications({ applications, deleteApplication }) {
 
                 </div>
 
+
+                {/* Applications Table */}
+
                 <div className="table-container">
 
                     <table>
 
                         <thead>
-
                             <tr>
-                                <th>Company</th>
-                                <th>Position</th>
-                                <th>Status</th>
-                                <th>Applied Date</th>
-                                <th>Action</th>
-                            </tr>
 
+                                <th>Company</th>
+
+                                <th>Position</th>
+
+                                <th>Status</th>
+
+                                <th>Applied Date</th>
+
+                                <th>Action</th>
+
+                            </tr>
                         </thead>
+
 
                         <tbody>
 
@@ -145,22 +191,52 @@ function Applications({ applications, deleteApplication }) {
                                     <td>
                                         {application.appliedDate}
                                     </td>
+
                                     <td>
+
+                                        {/* View */}
+
                                         <button
+                                            type="button"
+                                            className="action-btn"
+                                            onClick={() =>
+                                                navigate(
+                                                    `/application/${application.id}`
+                                                )
+                                            }
+                                        >
+                                            View
+                                        </button>
+
+
+                                        {/* Edit */}
+
+                                        <button
+                                            type="button"
                                             className="action-btn edit-btn"
-                                            onClick={() => navigate(`/edit-application/${application.id}`)}
+                                            onClick={() =>
+                                                navigate(
+                                                    `/edit-application/${application.id}`
+                                                )
+                                            }
                                         >
                                             Edit
                                         </button>
 
+
+                                        {/* Delete */}
+
                                         <button
+                                            type="button"
                                             className="action-btn delete-btn"
-                                            onClick={() => deleteApplication(application.id)}
+                                            onClick={() =>
+                                                openDeleteModal(application)
+                                            }
                                         >
                                             Delete
                                         </button>
-                                    </td>
 
+                                    </td>
 
                                 </tr>
 
@@ -170,15 +246,73 @@ function Applications({ applications, deleteApplication }) {
 
                     </table>
 
+
                     {filteredApplications.length === 0 && (
+
                         <p className="no-applications">
                             No applications found.
                         </p>
+
                     )}
 
                 </div>
 
             </div>
+
+
+            {/* Delete Modal */}
+
+            {applicationToDelete && (
+
+                <div className="delete-modal-overlay">
+
+                    <div className="delete-modal">
+
+                        <div className="delete-modal-icon">
+                            !
+                        </div>
+
+                        <h2>
+                            Delete Application?
+                        </h2>
+
+                        <p>
+                            Are you sure you want to delete the application for{' '}
+                            <strong>
+                                {applicationToDelete.company}
+                            </strong>
+                            ?
+                        </p>
+
+
+                        <div className="delete-modal-actions">
+
+                            <button
+                                type="button"
+                                className="modal-cancel-btn"
+                                onClick={() =>
+                                    setApplicationToDelete(null)
+                                }
+                            >
+                                Cancel
+                            </button>
+
+
+                            <button
+                                type="button"
+                                className="modal-delete-btn"
+                                onClick={confirmDelete}
+                            >
+                                Delete Application
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
 
         </div>
     )

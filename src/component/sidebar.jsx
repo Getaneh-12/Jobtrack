@@ -7,42 +7,81 @@ import {
   Settings
 } from 'lucide-react'
 
+import { NavLink } from 'react-router-dom'
+
 function Sidebar() {
   return (
     <aside className="sidebar">
       <nav>
-        <a href="/">
+
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive ? 'active' : ''
+          }
+        >
           <LayoutDashboard size={20} />
           <span>Dashboard</span>
-        </a>
+        </NavLink>
 
-        <a href="/applications">
+
+        <NavLink
+          to="/applications"
+          className={({ isActive }) =>
+            isActive ? 'active' : ''
+          }
+        >
           <Briefcase size={20} />
           <span>Applications</span>
-        </a>
+        </NavLink>
 
-        <a href="/add-application">
+
+        <NavLink
+          to="/add-application"
+          className={({ isActive }) =>
+            isActive ? 'active' : ''
+          }
+        >
           <Plus size={20} />
           <span>Add Application</span>
-        </a>
+        </NavLink>
 
-        <a href="/interviews">
+
+        <NavLink
+          to="/interviews"
+          className={({ isActive }) =>
+            isActive ? 'active' : ''
+          }
+        >
           <Calendar size={20} />
           <span>Interviews</span>
-        </a>
+        </NavLink>
 
-        <a href="/reminders">
+
+        <NavLink
+          to="/reminders"
+          className={({ isActive }) =>
+            isActive ? 'active' : ''
+          }
+        >
           <Bell size={20} />
           <span>Reminders</span>
-        </a>
+        </NavLink>
 
-        <a href="/settings">
+
+        <NavLink
+          to="/settings"
+          className={({ isActive }) =>
+            isActive ? 'active' : ''
+          }
+        >
           <Settings size={20} />
           <span>Settings</span>
-        </a>
+        </NavLink>
+
       </nav>
     </aside>
-  ) 
+  )
 }
 
 export default Sidebar
