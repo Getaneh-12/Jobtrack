@@ -10,7 +10,7 @@ import EditApplication from './Pages/EditApplication'
 import Interviews from './Pages/Interviews'
 import EditInterview from './Pages/EditInterview'
 import Reminders from './Pages/Reminders'
-import EditReminder from './pages/EditReminder'
+import EditReminder from './Pages/EditReminder'
 import ApplicationDetails from './Pages/ApplicationDetail'
 import Settings from './Pages/Settings'
 
